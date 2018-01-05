@@ -1,0 +1,20 @@
+# https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+AllCops:
+  Exclude:
+    - '*.gemspec'
+  TargetRubyVersion: 2.4.2
+  DisplayCopNames: true
+
+Metrics/LineLength:
+  Max: 110
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Style/SignalException:
+  Enabled: false
