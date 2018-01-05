@@ -1,20 +1,67 @@
-# https://github.com/bbatsov/rubocop/blob/master/config/default.yml
-
 AllCops:
-  Exclude:
-    - '*.gemspec'
   TargetRubyVersion: 2.4.2
+
+  Exclude:
+    - ./**/schema.rb
+    - Gemfile
+    - bin/*
+    - bundle/**/*
+    - vendor/**/*
+
   DisplayCopNames: true
 
 Metrics/LineLength:
-  Max: 110
-
-Style/Documentation:
-  Enabled: false
+  Max: 120
+  Exclude:
+    - spec/**/*.rb
 
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
 
+Style/BlockDelimiters:
+  Exclude:
+    - spec/**/*.rb
+
 Style/SignalException:
+  Exclude:
+    - app/services/**/*.rb
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/CyclomaticComplexity:
+  Max: 7
+
+Metrics/ParameterLists:
+  Max: 10
+
+Metrics/MethodLength:
+  Max: 15
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%i': '[]'
+    '%I': '[]'
+    '%r': '{}'
+    '%w': '()'
+    '%W': '()'
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 200
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Documentation:
   Enabled: false
