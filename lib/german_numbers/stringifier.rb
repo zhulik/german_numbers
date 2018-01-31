@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'yaml'
-
 module GermanNumbers
-  class ToWords
+  class Stringifier
     def words(number)
       raise ArgumentError if number > 999_999_999_999 || number.negative?
       return postprocess(DIGITS[number]) unless DIGITS[number].nil?
