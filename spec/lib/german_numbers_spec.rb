@@ -66,7 +66,8 @@ describe GermanNumbers do
       end
     end
 
-    %w(ein sech sieb undeinundvierzig neunhundertachthunderteins nullhundert zehnhundert dreißighundert).each do |words|
+    %w(ein sech sieb undeinundvierzig neunhundertachthunderteins nullhundert zehnhundert dreißighundert wrong
+       errorhundert 123).each do |words|
       it "for #{words} it raises error" do
         expect { described_class.parse(words) }.to raise_error(ArgumentError)
       end
