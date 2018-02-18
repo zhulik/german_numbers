@@ -10,7 +10,7 @@ module GermanNumbers
         parts = string.split(GermanNumbers::DIGITS[1000]).reverse
         k = parts.one? && string.include?(GermanNumbers::DIGITS[1000]) ? 1000 : 1
         parts.inject(0) do |sum, part|
-          m = Machine.new
+          m = StackMachine.new
           (part.split('').reverse.inject(0, &m.method(:step)) * k).tap do
             k *= 1000
           end + sum

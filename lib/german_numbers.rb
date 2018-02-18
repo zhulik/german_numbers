@@ -21,5 +21,5 @@ end
 
 require 'german_numbers/stringifier'
 require 'german_numbers/parser/error'
-require 'german_numbers/parser/machine'
+require 'german_numbers/parser/stack_machine'
 require 'german_numbers/parser/parser'

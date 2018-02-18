@@ -2,7 +2,7 @@
 
 module GermanNumbers
   module Parser
-    class Machine
+    class StackMachine
       SHORT = {
         'eins' => 1,
         'sech' => 6,
