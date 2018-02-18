@@ -3,6 +3,7 @@
 require 'yaml'
 
 require 'german_numbers/version'
+require 'german_numbers/state_machine'
 
 module GermanNumbers
   DIGITS = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'data', 'de.yml'))['de']
