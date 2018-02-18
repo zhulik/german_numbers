@@ -9,43 +9,40 @@ module GermanNumbers
         'sieb' => 7
       }.freeze
 
+      KEYWORDS = {
+        'und' => :und_keyword,
+        'hundert' => :hundert_keyword
+      }.freeze
+
       def initialize
+        @state = SmallNumbersStateMachine.new(:initial)
         @collector = ''
-        @prev = 0
-        @and = false
-        @hundred = false
+        @multiplier = 1
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity
-      # rubocop:disable Metrics/PerceivedComplexity
-      # rubocop:disable Metrics/MethodLength
       def step(result, letter)
         @collector = letter + @collector
-        num = SHORT[@collector]
-        raise Error if !num.nil? && result != 10 && @collector != 'eins'
-        num ||= Parser::DIGITS[@collector]
-        if @collector == 'und'
-          raise Error if @and
-          @and = true
+        num = SHORT[@collector] || Parser::DIGITS[@collector]
+        @state.apply_num_state(num, @collector)
+
+        @state.hundert_keyword? do
+          @state.state = :hundreds
+          @multiplier = 100
         end
-        @collector = '' if @collector == 'und' || !num.nil?
+        unless KEYWORDS[@collector].nil?
+          @state.state = KEYWORDS[@collector]
+          @collector = ''
+          return result
+        end
         return result if num.nil?
-        result += if @prev == 100
-                    raise Error unless (1..9).cover?(num)
-                    @prev * (num - 1)
-                  else
-                    num
-                  end
-        if num == 100
-          raise Error if @hundred
-          @hundred = true
-        end
-        @prev = num
+        result += num * @multiplier
+        @collector = ''
         result
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
-      # rubocop:enable Metrics/PerceivedComplexity
-      # rubocop:enable Metrics/MethodLength
+
+      def empty?
+        @collector.empty?
+      end
     end
   end
 end

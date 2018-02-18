@@ -17,6 +17,8 @@ module GermanNumbers
       end
     end
     class << self
+      attr_reader :states, :transitions
+
       def state(state, can_be_initial: false)
         @states ||= {}
         @states[state] = State.new(state, can_be_initial)
@@ -49,6 +51,15 @@ module GermanNumbers
       self.class.validate_state!(initial)
       raise Error, "#{initial} is not possible initial state" unless self.class.can_be_initial?(initial)
       @state = initial
+
+      self.class.states.each_key do |name|
+        define_singleton_method "#{name}?" do |&block|
+          # binding.pry if @state == :hundert_keyword
+          return false unless @state == name
+          block&.call
+          true
+        end
+      end
     end
 
     def state=(new_state)

@@ -37,7 +37,7 @@ Metrics/ParameterLists:
   Max: 10
 
 Metrics/MethodLength:
-  Max: 15
+  Max: 20
 
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
