@@ -23,8 +23,7 @@ module GermanNumbers
       def step(result, letter)
         @collector = letter + @collector
         num = SHORT[@collector] || Parser::DIGITS[@collector]
-        @state.apply_num_state(num, @collector)
-
+        @state.apply_state!(num, @collector)
         @state.hundert_keyword? do
           @state.state = :hundreds
           @multiplier = 100
@@ -42,6 +41,10 @@ module GermanNumbers
 
       def empty?
         @collector.empty?
+      end
+
+      def finite_state?
+        @state.finite_state?
       end
     end
   end

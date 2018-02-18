@@ -7,27 +7,40 @@ module GermanNumbers
     class State
       attr_reader :name
 
-      def initialize(name, initial)
+      def initialize(name, initial, final, unique)
         @name = name
         @initial = initial
+        @final = final
+        @unique = unique
       end
 
       def can_be_initial?
         @initial
       end
+
+      def final?
+        @final
+      end
+
+      def unique?
+        @unique
+      end
     end
     class << self
       attr_reader :states, :transitions
 
-      def state(state, can_be_initial: false)
+      def state(state, can_be_initial: false, final: true, unique: false)
         @states ||= {}
-        @states[state] = State.new(state, can_be_initial)
+        @states[state] = State.new(state, can_be_initial, final, unique)
       end
 
       def transition(from:, to:)
-        validate_state!(from, to)
+        to = [to].flatten
+        validate_state!(from, *to)
         @transitions ||= Hash.new { [] }
-        @transitions[from] = @transitions[from] << to
+        to.each do |s|
+          @transitions[from] = @transitions[from] << s
+        end
       end
 
       def validate_state!(*states)
@@ -48,13 +61,13 @@ module GermanNumbers
     attr_reader :state
 
     def initialize(initial)
+      @history = Set.new
       self.class.validate_state!(initial)
       raise Error, "#{initial} is not possible initial state" unless self.class.can_be_initial?(initial)
       @state = initial
 
-      self.class.states.each_key do |name|
+      states.each_key do |name|
         define_singleton_method "#{name}?" do |&block|
-          # binding.pry if @state == :hundert_keyword
           return false unless @state == name
           block&.call
           true
@@ -62,9 +75,22 @@ module GermanNumbers
       end
     end
 
-    def state=(new_state)
-      raise Error, "#{new_state} is not possible state after #{@state}" unless self.class.transition?(@state, new_state)
-      @state = new_state
+    def state=(ns)
+      return if ns.nil?
+      raise Error, "#{ns} is not possible state after #{@state}" unless self.class.transition?(@state, ns)
+      raise Error, "#{ns} is a unique and has already been taken" if @history.include?(ns) && states[ns].unique?
+      @history << ns
+      @state = ns
+    end
+
+    def finite_state?
+      states[state].final?
+    end
+
+    private
+
+    def states
+      self.class.states
     end
   end
 end
