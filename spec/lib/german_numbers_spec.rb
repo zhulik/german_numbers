@@ -70,12 +70,12 @@ describe GermanNumbers do
        errorhundert 123 einshundert einstausend zwölfhundert einstausendeinstausend und undneunzig einhundertundneunzig
        nulltausend siebenzehn einzehn einszehn sechszehn zweizehn hundert).each do |words|
       it "for #{words} it raises error" do
-        expect { described_class.parse(words) }.to raise_error(GermanNumbers::Parser::Error)
+        expect { described_class.parse(words) }.to raise_error(GermanNumbers::Parser::ParsingError)
       end
     end
     [nil, ''].each do |value|
       it "for '#{value}' it raises error" do
-        expect { described_class.parse(value) }.to raise_error(GermanNumbers::Parser::Error)
+        expect { described_class.parse(value) }.to raise_error(GermanNumbers::Parser::ParsingError)
       end
     end
   end

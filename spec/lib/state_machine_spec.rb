@@ -4,13 +4,13 @@ describe GermanNumbers::StateMachine do
   describe '.new' do
     context 'when initial state is unknown' do
       it 'raises error' do
-        expect { StateMachineExample.new(:unknown) }.to raise_error(GermanNumbers::StateMachine::Error)
+        expect { StateMachineExample.new(:unknown) }.to raise_error(GermanNumbers::StateMachine::StateError)
       end
     end
 
     context 'when initial state is not possible' do
       it 'raises error' do
-        expect { StateMachineExample.new(:third) }.to raise_error(GermanNumbers::StateMachine::Error)
+        expect { StateMachineExample.new(:third) }.to raise_error(GermanNumbers::StateMachine::StateError)
       end
     end
   end
@@ -37,8 +37,8 @@ describe GermanNumbers::StateMachine do
 
     context 'with impossible transition' do
       it 'raises error' do
-        expect { machine.state = :unknown }.to raise_error(GermanNumbers::StateMachine::Error)
-        expect { machine.state = :third }.to raise_error(GermanNumbers::StateMachine::Error)
+        expect { machine.state = :unknown }.to raise_error(GermanNumbers::StateMachine::StateError)
+        expect { machine.state = :third }.to raise_error(GermanNumbers::StateMachine::StateError)
       end
     end
   end
