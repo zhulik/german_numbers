@@ -3,7 +3,7 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'german_numbers'
+require 'german_numbers/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'german_numbers'

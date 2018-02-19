@@ -17,7 +17,7 @@ module GermanNumbers
             raise Error if !m.empty? || !m.finite_state?
           end + sum
         end
-      rescue GermanNumbers::StateMachine::Error
+      rescue GermanNumbers::Parser::Error, GermanNumbers::StateMachine::Error
         raise GermanNumbers::Parser::Error, "#{string} is no a valid German number"
       end
     end
