@@ -32,7 +32,7 @@ module GermanNumbers
         raise GermanNumbers::Parser::ParsingError if ERRORS.include?(string)
         parts = string.split(' ')
         GermanNumbers::Parser::SmallNumberParser.new.parse(parts[0])
-      rescue GermanNumbers::Parser::ParsingError::GermanNumbers::StateMachine::StateError
+      rescue GermanNumbers::StateMachine::StateError
         raise GermanNumbers::Parser::ParsingError, "#{string} is no a valid German number"
       end
     end

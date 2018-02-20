@@ -4,6 +4,7 @@ module GermanNumbers
   module Parser
     class SmallNumberParser
       extend GermanNumbers::StateMachine
+      ERRORS = %w(null eins).freeze
 
       state_machine_for :state do
         state :initial, can_be_initial: true, final: false
@@ -22,19 +23,28 @@ module GermanNumbers
       end
 
       def parse(string)
-        string.split(/(tausend)/).reverse.inject(0) do |sum, part|
-          if tausend_keyword?
-            self.state = :thousands
-            @k *= 1000
-          end
-          if part == 'tausend'
-            self.state = :tausend_keyword
-            next sum
-          end
-          m = StackMachine.new
-          (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
-            raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state? || res > @max
-          end
+        string.split(/(tausend)/).reverse.inject(0, &method(:parse_part))
+      end
+
+      private
+
+      def parse_part(sum, part)
+        if tausend_keyword?
+          self.state = :thousands
+          @k *= 1000
+        end
+        if part == 'tausend'
+          self.state = :tausend_keyword
+          return sum
+        end
+        raise ParsingError if ERRORS.include?(part) && thousands?
+        parse_number(sum, part)
+      end
+
+      def parse_number(sum, part)
+        m = StackMachine.new
+        (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
+          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state? || res > @max
         end
       end
     end
