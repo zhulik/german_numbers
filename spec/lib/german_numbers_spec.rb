@@ -47,6 +47,8 @@ describe GermanNumbers do
     2_000_000_000 => 'zwei Milliarden',
     2_001_000_000 => 'zwei Milliarden eine Million',
     2_002_000_000 => 'zwei Milliarden zwei Millionen',
+    2_002_123_000 => 'zwei Milliarden zwei Millionen einhundertdreiundzwanzigtausend',
+    2_002_123_123 => 'zwei Milliarden zwei Millionen einhundertdreiundzwanzigtausendeinhundertdreiundzwanzig',
     213_431_983_111 => 'zweihundertdreizehn Milliarden vierhunderteinunddreißig Millionen neunhundertdreiundachtzigtausendeinhundertelf'
   }.freeze
 
