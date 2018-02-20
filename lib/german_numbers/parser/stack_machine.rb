@@ -5,7 +5,7 @@ module GermanNumbers
     class StackMachine
       extend GermanNumbers::StateMachine
 
-      state_machine_for :state do
+      state_machine_for :stack do
         state :initial, can_be_initial: true, final: false
         state :null, unique: true
         state :eins, unique: true
@@ -50,7 +50,7 @@ module GermanNumbers
       SHORT_UNITS = %w(drei vier fünf sech sieb acht neun).freeze
 
       def initialize
-        initialize_state(:initial)
+        initialize_stack(:initial)
         @collector = ''
         @multiplier = 1
       end
@@ -60,12 +60,12 @@ module GermanNumbers
         @collector = letter + @collector
         num = SHORT[@collector] || Parser::DIGITS[@collector]
         apply_state!(num, @collector)
-        hundert_keyword_state? do
-          hundreds_state!
+        hundert_keyword_stack? do
+          hundreds_stack!
           @multiplier = 100
         end
         unless KEYWORDS[@collector].nil?
-          self.state_state = KEYWORDS[@collector]
+          self.stack_state = KEYWORDS[@collector]
           @collector = ''
           return result
         end
@@ -83,14 +83,14 @@ module GermanNumbers
       private
 
       def apply_state!(num, collector)
-        return self.state_state = NUM_KEYWORDS[collector] unless NUM_KEYWORDS[collector].nil?
-        return self.state_state = :short_units if zehn_state? && SHORT_UNITS.include?(collector)
+        return self.stack_state = NUM_KEYWORDS[collector] unless NUM_KEYWORDS[collector].nil?
+        return self.stack_state = :short_units if zehn_stack? && SHORT_UNITS.include?(collector)
 
         apply_num_state!(num)
       end
 
       def apply_num_state!(num)
-        self.state_state = case num
+        self.stack_state = case num
                            when 10 then :zehn
                            when 1..9 then :units
                            when 11..19 then :under_twenty

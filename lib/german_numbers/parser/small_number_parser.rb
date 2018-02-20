@@ -6,7 +6,7 @@ module GermanNumbers
       extend GermanNumbers::StateMachine
       ERRORS = %w(null eins).freeze
 
-      state_machine_for :state do
+      state_machine_for :order do
         state :initial, can_be_initial: true, final: false
         state :units
         state :tausend_keyword, unique: true, final: false
@@ -17,7 +17,7 @@ module GermanNumbers
       end
 
       def initialize(range = 0..999_999)
-        initialize_state(:initial)
+        initialize_order(:initial)
         @range = range
         @k = 1
       end
@@ -29,22 +29,22 @@ module GermanNumbers
       private
 
       def parse_part(sum, part)
-        if tausend_keyword_state?
-          thousands_state!
+        if tausend_keyword_order?
+          thousands_order!
           @k *= 1000
         end
         if part == 'tausend'
-          tausend_keyword_state!
+          tausend_keyword_order!
           return sum
         end
-        raise ParsingError if ERRORS.include?(part) && thousands_state?
+        raise ParsingError if ERRORS.include?(part) && thousands_order?
         parse_number(sum, part)
       end
 
       def parse_number(sum, part)
         m = StackMachine.new
         (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
-          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state_state? || !@range.include?(res)
+          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_stack_state? || !@range.include?(res)
         end
       end
     end

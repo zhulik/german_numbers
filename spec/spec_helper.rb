@@ -3,6 +3,6 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'german_numbers'
 require 'pry'
+require 'german_numbers'
 require 'support/state_machine_example'

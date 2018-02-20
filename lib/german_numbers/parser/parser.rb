@@ -7,7 +7,7 @@ module GermanNumbers
 
     class Parser
       extend GermanNumbers::StateMachine
-      state_machine_for :state do
+      state_machine_for :order do
         state :initial, can_be_initial: true, final: false
         state :thousands
         state :million_keyword, final: false
@@ -40,13 +40,13 @@ module GermanNumbers
       }.freeze
 
       def initialize
-        initialize_state(:initial)
+        initialize_order(:initial)
       end
 
       def parse(string)
         raise GermanNumbers::Parser::ParsingError if ERRORS.include?(string)
         string.split(' ').reverse.inject(0, &method(:parse_part)).tap do
-          raise GermanNumbers::Parser::ParsingError unless final_state_state?
+          raise GermanNumbers::Parser::ParsingError unless final_order_state?
         end
       rescue GermanNumbers::Parser::ParsingError, GermanNumbers::StateMachine::StateError
         raise GermanNumbers::Parser::ParsingError, "#{string} is no a valid German number"
@@ -55,48 +55,48 @@ module GermanNumbers
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
       def parse_part(sum, part)
-        if initial_state? && KEYWORDS[part].nil?
-          thousands_state!
+        if initial_order? && KEYWORDS[part].nil?
+          thousands_order!
           return parse_part(sum, part)
         end
 
         unless KEYWORDS[part].nil?
-          self.state_state = KEYWORDS[part]
+          self.order_state = KEYWORDS[part]
           return sum
         end
 
-        thousands_state? do
+        thousands_order? do
           return GermanNumbers::Parser::SmallNumberParser.new.parse(part)
         end
 
-        million_keyword_state? do
-          million_state!
+        million_keyword_order? do
+          million_order!
         end
-        millionen_keyword_state? do
-          millions_state!
-        end
-
-        milliarde_keyword_state? do
-          billion_state!
-        end
-        milliarden_keyword_state? do
-          billions_state!
+        millionen_keyword_order? do
+          millions_order!
         end
 
-        million_state? do
+        milliarde_keyword_order? do
+          billion_order!
+        end
+        milliarden_keyword_order? do
+          billions_order!
+        end
+
+        million_order? do
           raise GermanNumbers::Parser::ParsingError unless part == 'eine'
           return sum + 1_000_000
         end
-        billion_state? do
+        billion_order? do
           raise GermanNumbers::Parser::ParsingError unless part == 'eine'
           return sum + 1_000_000_000
         end
 
-        millions_state? do
+        millions_order? do
           return sum + GermanNumbers::Parser::SmallNumberParser.new(2..999).parse(part) * 1_000_000
         end
 
-        billions_state? do
+        billions_order? do
           return sum + GermanNumbers::Parser::SmallNumberParser.new(2..999).parse(part) * 1_000_000_000
         end
       end
