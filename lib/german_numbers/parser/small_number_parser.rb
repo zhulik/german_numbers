@@ -29,22 +29,22 @@ module GermanNumbers
       private
 
       def parse_part(sum, part)
-        if tausend_keyword?
-          self.state = :thousands
+        if tausend_keyword_state?
+          thousands_state!
           @k *= 1000
         end
         if part == 'tausend'
-          self.state = :tausend_keyword
+          tausend_keyword_state!
           return sum
         end
-        raise ParsingError if ERRORS.include?(part) && thousands?
+        raise ParsingError if ERRORS.include?(part) && thousands_state?
         parse_number(sum, part)
       end
 
       def parse_number(sum, part)
         m = StackMachine.new
         (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
-          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state? || res > @max
+          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state_state? || res > @max
         end
       end
     end

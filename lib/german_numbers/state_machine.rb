@@ -68,10 +68,10 @@ module GermanNumbers
       m = Machine.new
       m.instance_eval(&block)
 
-      define_method("#{field}=") do |ns|
+      define_method("#{field}_state=") do |ns|
         return if ns.nil?
-        unless m.transition?(send(field), ns)
-          raise GermanNumbers::StateMachine::StateError, "#{ns} is not possible state after #{send(field)}"
+        unless m.transition?(send("#{field}_state"), ns)
+          raise GermanNumbers::StateMachine::StateError, "#{ns} is not possible state after #{send("#{field}_state")}"
         end
         if instance_variable_get("@#{field}_state_history").include?(ns) && m.states[ns].unique?
           raise GermanNumbers::StateMachine::StateError, "#{ns} is a unique and has already been taken"
@@ -80,7 +80,7 @@ module GermanNumbers
         instance_variable_set("@#{field}_state", ns)
       end
 
-      define_method(field) do
+      define_method("#{field}_state") do
         instance_variable_get("@#{field}_state")
       end
 
@@ -93,15 +93,19 @@ module GermanNumbers
         instance_variable_set("@#{field}_state", initial)
       end
 
-      define_method("final_#{field}?") do
-        m.states[send(field)].final?
+      define_method("final_#{field}_state?") do
+        m.states[send("#{field}_state")].final?
       end
 
       m.states.each_key do |st|
-        define_method("#{st}?") do |&blk|
-          return false unless send(field) == st
+        define_method("#{st}_state?") do |&blk|
+          return false unless send("#{field}_state") == st
           blk&.call
           true
+        end
+
+        define_method("#{st}_state!") do
+          send("#{field}_state=", st)
         end
       end
     end

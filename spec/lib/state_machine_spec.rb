@@ -20,25 +20,25 @@ describe GermanNumbers::StateMachine do
 
     context 'with possible transition' do
       it 'changes state' do
-        machine.state = :second
-        expect(machine.state).to eq(:second)
-        machine.state = :third
-        expect(machine.state).to eq(:third)
-        machine.state = :first
-        expect(machine.state).to eq(:first)
-        machine.state = :second
-        expect(machine.state).to eq(:second)
-        machine.state = :third
-        expect(machine.state).to eq(:third)
-        machine.state = :fourth
-        expect(machine.state).to eq(:fourth)
+        machine.state_state = :second
+        expect(machine.state_state).to eq(:second)
+        machine.state_state = :third
+        expect(machine.state_state).to eq(:third)
+        machine.state_state = :first
+        expect(machine.state_state).to eq(:first)
+        machine.state_state = :second
+        expect(machine.state_state).to eq(:second)
+        machine.state_state = :third
+        expect(machine.state_state).to eq(:third)
+        machine.state_state = :fourth
+        expect(machine.state_state).to eq(:fourth)
       end
     end
 
     context 'with impossible transition' do
       it 'raises error' do
-        expect { machine.state = :unknown }.to raise_error(GermanNumbers::StateMachine::StateError)
-        expect { machine.state = :third }.to raise_error(GermanNumbers::StateMachine::StateError)
+        expect { machine.state_state = :unknown }.to raise_error(GermanNumbers::StateMachine::StateError)
+        expect { machine.state_state = :third }.to raise_error(GermanNumbers::StateMachine::StateError)
       end
     end
   end

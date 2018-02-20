@@ -60,12 +60,12 @@ module GermanNumbers
         @collector = letter + @collector
         num = SHORT[@collector] || Parser::DIGITS[@collector]
         apply_state!(num, @collector)
-        hundert_keyword? do
-          self.state = :hundreds
+        hundert_keyword_state? do
+          hundreds_state!
           @multiplier = 100
         end
         unless KEYWORDS[@collector].nil?
-          self.state = KEYWORDS[@collector]
+          self.state_state = KEYWORDS[@collector]
           @collector = ''
           return result
         end
@@ -83,19 +83,19 @@ module GermanNumbers
       private
 
       def apply_state!(num, collector)
-        return self.state = NUM_KEYWORDS[collector] unless NUM_KEYWORDS[collector].nil?
-        return self.state = :short_units if zehn? && SHORT_UNITS.include?(collector)
+        return self.state_state = NUM_KEYWORDS[collector] unless NUM_KEYWORDS[collector].nil?
+        return self.state_state = :short_units if zehn_state? && SHORT_UNITS.include?(collector)
 
         apply_num_state!(num)
       end
 
       def apply_num_state!(num)
-        self.state = case num
-                     when 10 then :zehn
-                     when 1..9 then :units
-                     when 11..19 then :under_twenty
-                     when 20..99 then :dozens
-                     end
+        self.state_state = case num
+                           when 10 then :zehn
+                           when 1..9 then :units
+                           when 11..19 then :under_twenty
+                           when 20..99 then :dozens
+                           end
       end
     end
   end
