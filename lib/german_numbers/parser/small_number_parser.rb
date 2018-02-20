@@ -16,9 +16,9 @@ module GermanNumbers
         transition from: :tausend_keyword, to: :thousands
       end
 
-      def initialize(max = 999_999)
+      def initialize(range = 0..999_999)
         initialize_state(:initial)
-        @max = max
+        @range = range
         @k = 1
       end
 
@@ -44,7 +44,7 @@ module GermanNumbers
       def parse_number(sum, part)
         m = StackMachine.new
         (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
-          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state_state? || res > @max
+          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_state_state? || !@range.include?(res)
         end
       end
     end

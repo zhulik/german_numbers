@@ -98,13 +98,13 @@ module GermanNumbers
       end
 
       m.states.each_key do |st|
-        define_method("#{st}_state?") do |&blk|
+        define_method("#{st}_#{field}?") do |&blk|
           return false unless send("#{field}_state") == st
           blk&.call
           true
         end
 
-        define_method("#{st}_state!") do
+        define_method("#{st}_#{field}!") do
           send("#{field}_state=", st)
         end
       end

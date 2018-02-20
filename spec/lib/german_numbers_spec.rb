@@ -39,9 +39,10 @@ describe GermanNumbers do
     727_727 => 'siebenhundertsiebenundzwanzigtausendsiebenhundertsiebenundzwanzig', # fuck!
 
     1_000_000 => 'eine Million',
-    2_000_000 => 'zwei Millionen',
     1_000_001 => 'eine Million eins',
+    2_000_000 => 'zwei Millionen',
     2_000_006 => 'zwei Millionen sechs',
+    12_000_006 => 'zwölf Millionen sechs',
     727_727_727 => 'siebenhundertsiebenundzwanzig Millionen siebenhundertsiebenundzwanzigtausendsiebenhundertsiebenundzwanzig', # AHAHAHAHA
     1_000_000_000 => 'eine Milliarde',
     2_000_000_000 => 'zwei Milliarden',
@@ -62,22 +63,22 @@ describe GermanNumbers do
 
   describe '.parse' do
     EXAMPLES.each do |number, words|
-      next unless number < 1_000_000
+      # next unless number < 2_002_000_000
       it "for #{words} it returns #{number}" do
         expect(described_class.parse(words)).to eq(number)
       end
     end
 
-    %w(ein sech sieb undeinundvierzig neunhundertachthunderteins nullhundert zehnhundert dreißighundert wrong
-       errorhundert 123 einshundert einstausend zwölfhundert einstausendeinstausend und undneunzig einhundertundneunzig
-       nulltausend siebenzehn einzehn einszehn sechszehn zweizehn hundert).each do |words|
-      it "for #{words} it raises error" do
+    ['ein', 'sech', 'sieb', 'undeinundvierzig', 'neunhundertachthunderteins', 'nullhundert', 'zehnhundert',
+     'dreißighundert', 'wrong', 'errorhundert', '123', 'einshundert', 'einstausend', 'zwölfhundert',
+     'einstausendeinstausend', 'und', 'undneunzig', 'einhundertundneunzig', 'nulltausend', 'siebenzehn', 'einzehn',
+     'einszehn', 'sechszehn', 'zweizehn', 'hundert', nil, '', 'zwei Million', 'zwei Billion', 'eine Millionen',
+     'eine Milliarden', 'eintausend Millionen', 'null Million', 'null Millionen', 'null Milliarde', 'null Milliarden',
+     'ein Millionen', 'eins Millionen', 'ein Milliarde', 'ein Milliarden', 'eine Million eine Million',
+     'eine Milliarde eine Milliarde', 'Million', 'Milliarde', 'Millionen', 'Milliarden'].each do |words|
+
+      it "for '#{words}' it raises error" do
         expect { described_class.parse(words) }.to raise_error(GermanNumbers::Parser::ParsingError)
-      end
-    end
-    [nil, ''].each do |value|
-      it "for '#{value}' it raises error" do
-        expect { described_class.parse(value) }.to raise_error(GermanNumbers::Parser::ParsingError)
       end
     end
   end
