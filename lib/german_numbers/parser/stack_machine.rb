@@ -42,12 +42,7 @@ module GermanNumbers
         'hundert' => :hundert_keyword
       }.freeze
 
-      NUM_KEYWORDS = {
-        'eins' => :eins,
-        'null' => :null
-      }.freeze
-
-      SHORT_UNITS = %w(drei vier fünf sech sieb acht neun).freeze
+      SHORT_UNITS = Set.new(%w(drei vier fünf sech sieb acht neun)).freeze
 
       def initialize
         initialize_stack(:initial)
@@ -59,20 +54,21 @@ module GermanNumbers
       def step(result, letter)
         @collector = letter + @collector
         num = SHORT[@collector] || Parser::DIGITS[@collector]
-        apply_state!(num, @collector)
-        hundert_keyword_stack? do
-          hundreds_stack!
+        unless (s = select_state(num, @collector)).nil?
+          self.stack_state = s
+        end
+        if stack_state == :hundert_keyword
+          self.stack_state = :hundreds
           @k = 100
         end
-        unless KEYWORDS[@collector].nil?
-          self.stack_state = KEYWORDS[@collector]
+        unless (st = KEYWORDS[@collector]).nil?
+          self.stack_state = st
           @collector = ''
           return result
         end
         return result if num.nil?
-        result += num * @k
         @collector = ''
-        result
+        result + num * @k
       end
       # rubocop:enable Metrics/MethodLength
 
@@ -82,21 +78,29 @@ module GermanNumbers
 
       private
 
-      def apply_state!(num, collector)
-        return self.stack_state = NUM_KEYWORDS[collector] unless NUM_KEYWORDS[collector].nil?
-        return self.stack_state = :short_units if zehn_stack? && SHORT_UNITS.include?(collector)
-
-        apply_num_state!(num)
+      def select_state(num, collector)
+        if stack_state == :zehn && SHORT_UNITS.include?(collector)
+          :short_units
+        elsif collector == 'eins'
+          :eins
+        elsif collector == 'null'
+          :null
+        else
+          num_state(num)
+        end
       end
 
-      def apply_num_state!(num)
-        self.stack_state = case num
-                           when 10 then :zehn
-                           when 1..9 then :units
-                           when 11..19 then :under_twenty
-                           when 20..99 then :dozens
-                           end
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
+      def num_state(num)
+        return if num.nil?
+        return :zehn if num == 10
+        return :units if num >= 1 && num <= 9
+        return :under_twenty if num >= 11 && num <= 19
+        return :dozens if num >= 20 && num <= 99
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
     end
   end
 end

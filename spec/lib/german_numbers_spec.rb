@@ -81,5 +81,16 @@ describe GermanNumbers do
         expect { described_class.parse(words) }.to raise_error(GermanNumbers::Parser::ParsingError)
       end
     end
+
+    it 'vise-versa' do
+      require 'ruby-prof'
+      result = RubyProf.profile do
+        (0..25_000).each do |num|
+          expect(described_class.parse(described_class.stringify(num))).to eq(num)
+        end
+      end
+      printer = RubyProf::GraphPrinter.new(result)
+      printer.print(STDOUT, {})
+    end
   end
 end

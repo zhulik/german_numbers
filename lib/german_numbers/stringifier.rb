@@ -2,6 +2,9 @@
 
 module GermanNumbers
   class Stringifier
+    SMALL_KEYWORDS = %w(hundert tausend).freeze
+    BIG_KEYWORDS = %w(Million Milliarde).freeze
+
     def words(number)
       raise ArgumentError if number > 999_999_999_999 || number.negative?
       return postprocess(DIGITS[number]) unless DIGITS[number].nil?
@@ -33,8 +36,8 @@ module GermanNumbers
 
     def postprocess(result)
       result += 's' if result.end_with?('ein')
-      result = 'ein' + result if %w(hundert tausend).include?(result)
-      result = 'eine ' + result if %w(Million Milliarde).include?(result)
+      result = 'ein' + result if SMALL_KEYWORDS.include?(result)
+      result = 'eine ' + result if BIG_KEYWORDS.include?(result)
       result.strip
     end
 

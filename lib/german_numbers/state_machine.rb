@@ -53,14 +53,6 @@ module GermanNumbers
           raise StateError, "#{state} is unknown state" unless @states.include?(state)
         end
       end
-
-      def transition?(old_state, new_state)
-        @transitions[old_state].include?(new_state)
-      end
-
-      def can_be_initial?(state)
-        @states[state].can_be_initial?
-      end
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -68,44 +60,33 @@ module GermanNumbers
     def state_machine_for(field, &block)
       m = Machine.new
       m.instance_eval(&block)
-
-      define_method("#{field}_state=") do |ns|
-        return if ns.nil?
-        unless m.transition?(send("#{field}_state"), ns)
-          raise StateError, "#{ns} is not possible state after #{send("#{field}_state")}"
-        end
-        if instance_variable_get("@#{field}_state_history").include?(ns) && m.states[ns].unique?
-          raise StateError, "#{ns} is a unique state and has already been taken"
-        end
-        instance_variable_get("@#{field}_state_history") << ns
-        instance_variable_set("@#{field}_state", ns)
-      end
+      var_name = "@#{field}_state"
+      set_name = "#{field}_state="
+      history_name = "@#{field}_state_history"
 
       define_method("#{field}_state") do
-        instance_variable_get("@#{field}_state")
+        instance_variable_get(var_name)
+      end
+
+      define_method(set_name) do |ns|
+        state = instance_variable_get(var_name)
+        raise StateError, "#{ns} is not possible state after #{state}" unless m.transitions[state].include?(ns)
+        if instance_variable_get(history_name).include?(ns) && m.states[ns].unique?
+          raise StateError, "#{ns} is a unique state and has already been taken"
+        end
+        instance_variable_get(history_name) << ns
+        instance_variable_set(var_name, ns)
       end
 
       define_method("initialize_#{field}") do |initial|
         m.validate_state!(initial)
-        instance_variable_set("@#{field}_state_history", Set.new)
-        raise StateError, "#{initial} is not possible initial state" unless m.can_be_initial?(initial)
-        instance_variable_set("@#{field}_state", initial)
+        raise StateError, "#{initial} is not possible initial state" unless m.states[initial].can_be_initial?
+        instance_variable_set(history_name, Set.new)
+        instance_variable_set(var_name, initial)
       end
 
       define_method("final_#{field}_state?") do
-        m.states[send("#{field}_state")].final?
-      end
-
-      m.states.each_key do |st|
-        define_method("#{st}_#{field}?") do |&blk|
-          return false unless send("#{field}_state") == st
-          blk&.call
-          true
-        end
-
-        define_method("#{st}_#{field}!") do
-          send("#{field}_state=", st)
-        end
+        m.states[instance_variable_get(var_name)].final?
       end
     end
     # rubocop:enable Metrics/AbcSize

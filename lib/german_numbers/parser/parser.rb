@@ -54,54 +54,42 @@ module GermanNumbers
 
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
       def parse_part(sum, part)
-        if initial_order? && KEYWORDS[part].nil?
-          thousands_order!
+        if order_state == :initial && KEYWORDS[part].nil?
+          self.order_state = :thousands
           return parse_part(sum, part)
         end
 
-        unless KEYWORDS[part].nil?
-          self.order_state = KEYWORDS[part]
+        unless (st = KEYWORDS[part]).nil?
+          self.order_state = st
           return sum
         end
 
-        thousands_order? do
-          return SmallNumberParser.new.parse(part)
-        end
+        return SmallNumberParser.new.parse(part) if order_state == :thousands
 
-        million_keyword_order? do
-          million_order!
-        end
-        millionen_keyword_order? do
-          millions_order!
-        end
+        self.order_state = :million if order_state == :million_keyword
+        self.order_state = :millions if order_state == :millionen_keyword
+        self.order_state = :billion if order_state == :milliarde_keyword
+        self.order_state = :billions if order_state == :milliarden_keyword
 
-        milliarde_keyword_order? do
-          billion_order!
-        end
-        milliarden_keyword_order? do
-          billions_order!
-        end
-
-        million_order? do
+        if order_state == :million
           raise ParsingError unless part == 'eine'
           return sum + 1_000_000
         end
-        billion_order? do
+        if order_state == :billion
           raise ParsingError unless part == 'eine'
           return sum + 1_000_000_000
         end
 
-        millions_order? do
-          return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000
-        end
-
-        billions_order? do
-          return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000_000
-        end
+        return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000 if order_state == :millions
+        return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000_000 if order_state == :billions
       end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
     end
   end
 end
