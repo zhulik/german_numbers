@@ -4,6 +4,7 @@ module GermanNumbers
   module StateMachine
     class StateError < StandardError
     end
+
     class State
       attr_reader :name
 
@@ -49,7 +50,7 @@ module GermanNumbers
 
       def validate_state!(*states)
         states.each do |state|
-          raise GermanNumbers::StateMachine::StateError, "#{state} is unknown state" unless @states.include?(state)
+          raise StateError, "#{state} is unknown state" unless @states.include?(state)
         end
       end
 
@@ -71,10 +72,10 @@ module GermanNumbers
       define_method("#{field}_state=") do |ns|
         return if ns.nil?
         unless m.transition?(send("#{field}_state"), ns)
-          raise GermanNumbers::StateMachine::StateError, "#{ns} is not possible state after #{send("#{field}_state")}"
+          raise StateError, "#{ns} is not possible state after #{send("#{field}_state")}"
         end
         if instance_variable_get("@#{field}_state_history").include?(ns) && m.states[ns].unique?
-          raise GermanNumbers::StateMachine::StateError, "#{ns} is a unique and has already been taken"
+          raise StateError, "#{ns} is a unique state and has already been taken"
         end
         instance_variable_get("@#{field}_state_history") << ns
         instance_variable_set("@#{field}_state", ns)
@@ -87,9 +88,7 @@ module GermanNumbers
       define_method("initialize_#{field}") do |initial|
         m.validate_state!(initial)
         instance_variable_set("@#{field}_state_history", Set.new)
-        unless m.can_be_initial?(initial)
-          raise GermanNumbers::StateMachine::StateError, "#{initial} is not possible initial state"
-        end
+        raise StateError, "#{initial} is not possible initial state" unless m.can_be_initial?(initial)
         instance_variable_set("@#{field}_state", initial)
       end
 

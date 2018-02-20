@@ -44,7 +44,7 @@ module GermanNumbers
       def parse_number(sum, part)
         m = StackMachine.new
         (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
-          raise GermanNumbers::Parser::ParsingError if !m.empty? || !m.final_stack_state? || !@range.include?(res)
+          raise ParsingError if !m.empty? || !m.final_stack_state? || !@range.include?(res)
         end
       end
     end

@@ -44,12 +44,12 @@ module GermanNumbers
       end
 
       def parse(string)
-        raise GermanNumbers::Parser::ParsingError if ERRORS.include?(string)
+        raise ParsingError if ERRORS.include?(string)
         string.split(' ').reverse.inject(0, &method(:parse_part)).tap do
-          raise GermanNumbers::Parser::ParsingError unless final_order_state?
+          raise ParsingError unless final_order_state?
         end
-      rescue GermanNumbers::Parser::ParsingError, GermanNumbers::StateMachine::StateError
-        raise GermanNumbers::Parser::ParsingError, "#{string} is no a valid German number"
+      rescue ParsingError, StateMachine::StateError
+        raise ParsingError, "#{string} is no a valid German number"
       end
 
       # rubocop:disable Metrics/AbcSize
@@ -66,7 +66,7 @@ module GermanNumbers
         end
 
         thousands_order? do
-          return GermanNumbers::Parser::SmallNumberParser.new.parse(part)
+          return SmallNumberParser.new.parse(part)
         end
 
         million_keyword_order? do
@@ -84,20 +84,20 @@ module GermanNumbers
         end
 
         million_order? do
-          raise GermanNumbers::Parser::ParsingError unless part == 'eine'
+          raise ParsingError unless part == 'eine'
           return sum + 1_000_000
         end
         billion_order? do
-          raise GermanNumbers::Parser::ParsingError unless part == 'eine'
+          raise ParsingError unless part == 'eine'
           return sum + 1_000_000_000
         end
 
         millions_order? do
-          return sum + GermanNumbers::Parser::SmallNumberParser.new(2..999).parse(part) * 1_000_000
+          return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000
         end
 
         billions_order? do
-          return sum + GermanNumbers::Parser::SmallNumberParser.new(2..999).parse(part) * 1_000_000_000
+          return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000_000
         end
       end
       # rubocop:enable Metrics/AbcSize

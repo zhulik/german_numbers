@@ -52,7 +52,7 @@ module GermanNumbers
       def initialize
         initialize_stack(:initial)
         @collector = ''
-        @multiplier = 1
+        @k = 1
       end
 
       # rubocop:disable Metrics/MethodLength
@@ -62,7 +62,7 @@ module GermanNumbers
         apply_state!(num, @collector)
         hundert_keyword_stack? do
           hundreds_stack!
-          @multiplier = 100
+          @k = 100
         end
         unless KEYWORDS[@collector].nil?
           self.stack_state = KEYWORDS[@collector]
@@ -70,7 +70,7 @@ module GermanNumbers
           return result
         end
         return result if num.nil?
-        result += num * @multiplier
+        result += num * @k
         @collector = ''
         result
       end
