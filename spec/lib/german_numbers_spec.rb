@@ -76,7 +76,6 @@ describe GermanNumbers do
      'eine Milliarden', 'eintausend Millionen', 'null Million', 'null Millionen', 'null Milliarde', 'null Milliarden',
      'ein Millionen', 'eins Millionen', 'ein Milliarde', 'ein Milliarden', 'eine Million eine Million',
      'eine Milliarde eine Milliarde', 'Million', 'Milliarde', 'Millionen', 'Milliarden'].each do |words|
-
       it "for '#{words}' it raises error" do
         expect { described_class.parse(words) }.to raise_error(GermanNumbers::Parser::ParsingError)
       end
@@ -91,6 +90,20 @@ describe GermanNumbers do
       end
       printer = RubyProf::GraphPrinter.new(result)
       printer.print(STDOUT, {})
+    end
+  end
+
+  describe 'valid?' do
+    context 'when valid number is passed' do
+      it 'returns true' do
+        expect(described_class.valid?('zwei Millionen sechs')).to be_truthy
+      end
+    end
+
+    context 'when invalid number is passed' do
+      it 'returns false' do
+        expect(described_class.valid?('invalid')).to be_falsey
+      end
     end
   end
 end

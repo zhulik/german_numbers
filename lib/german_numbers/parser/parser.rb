@@ -49,7 +49,7 @@ module GermanNumbers
           raise ParsingError unless final_order_state?
         end
       rescue ParsingError, StateMachine::StateError
-        raise ParsingError, "#{string} is no a valid German number"
+        raise ParsingError, "#{string} is not a valid German number"
       end
 
       # rubocop:disable Metrics/AbcSize

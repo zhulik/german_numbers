@@ -16,6 +16,13 @@ module GermanNumbers
     def parse(string)
       GermanNumbers::Parser::Parser.new.parse(string)
     end
+
+    def valid?(string)
+      GermanNumbers::Parser::Parser.new.parse(string)
+      true
+    rescue GermanNumbers::Parser::ParsingError
+      false
+    end
   end
 end
 
