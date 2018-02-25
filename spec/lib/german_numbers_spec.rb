@@ -82,7 +82,7 @@ describe GermanNumbers do
       end
     end
 
-    it 'vise-versa' do
+    xit 'vise-versa' do
       require 'ruby-prof'
       result = RubyProf.profile do
         (0..25_000).each do |num|
