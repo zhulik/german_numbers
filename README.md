@@ -1,7 +1,7 @@
 # GermanNumbers
 
 German numbers is a ruby gem for converting numbers into German strings and vise-versa.
-It supports numbers up to 999 999 999 999. Also it handle malformed and invalid strings. See
+It supports numbers up to 999 999 999 999. Also it can handle malformed and invalid strings. See
 examples below.
 
 ## Installation
