@@ -50,14 +50,17 @@ module GermanNumbers
 
     def under_hundred(digits)
       return '' if digits.all?(&:zero?)
+
       n = DIGITS["#{digits[1]}#{digits[0]}".to_i]
       return n unless n.nil?
+
       DIGITS[digits[0]] + 'und' + DIGITS[(digits[1] * 10)]
     end
 
     def decline(count, number)
       return number if count == 1
       return number + 'n' if number.end_with?('e')
+
       number + 'en'
     end
   end

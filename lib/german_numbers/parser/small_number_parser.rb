@@ -36,7 +36,8 @@ module GermanNumbers
           self.order_state = :tausend_keyword
           return sum
         end
-        raise ParsingError if (part == 'eins' || part == 'null') && order_state == :thousands
+        raise ParsingError if %w(eins null).include?(part) && order_state == :thousands
+
         parse_number(sum, part)
       end
 

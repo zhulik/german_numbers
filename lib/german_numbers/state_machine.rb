@@ -74,6 +74,7 @@ module GermanNumbers
         if instance_variable_get(history_name).include?(ns) && m.states[ns].unique?
           raise StateError, "#{ns} is a unique state and has already been taken"
         end
+
         instance_variable_get(history_name) << ns
         instance_variable_set(var_name, ns)
       end
@@ -81,6 +82,7 @@ module GermanNumbers
       define_method("initialize_#{field}") do |initial|
         m.validate_state!(initial)
         raise StateError, "#{initial} is not possible initial state" unless m.states[initial].can_be_initial?
+
         instance_variable_set(history_name, Set.new)
         instance_variable_set(var_name, initial)
       end

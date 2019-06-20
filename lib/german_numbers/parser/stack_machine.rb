@@ -67,6 +67,7 @@ module GermanNumbers
           return result
         end
         return result if num.nil?
+
         @collector = ''
         result + num * @k
       end

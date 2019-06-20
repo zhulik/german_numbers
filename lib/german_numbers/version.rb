@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module GermanNumbers
-  VERSION = '0.5'
+  VERSION = '0.7'
 end

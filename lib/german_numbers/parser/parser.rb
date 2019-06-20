@@ -45,6 +45,7 @@ module GermanNumbers
 
       def parse(string)
         raise ParsingError if ERRORS.include?(string)
+
         string.split(' ').reverse.inject(0, &method(:parse_part)).tap do
           raise ParsingError unless final_order_state?
         end
@@ -76,10 +77,12 @@ module GermanNumbers
 
         if order_state == :million
           raise ParsingError unless part == 'eine'
+
           return sum + 1_000_000
         end
         if order_state == :billion
           raise ParsingError unless part == 'eine'
+
           return sum + 1_000_000_000
         end
 
