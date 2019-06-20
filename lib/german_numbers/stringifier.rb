@@ -11,7 +11,7 @@ module GermanNumbers
 
       number = number.to_s.rjust(12, '0')
 
-      billions, millions, thousands, number = number.to_s.reverse.scan(/.{1,3}/).map do |part|
+      billions, millions, thousands, number = number.reverse.scan(/.{1,3}/).map do |part|
         part.reverse.to_i
       end.reverse
 
