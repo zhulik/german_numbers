@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'sorbet-runtime'
 
 require 'german_numbers/version'
 require 'german_numbers/state_machine'
