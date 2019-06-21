@@ -11,7 +11,7 @@ module GermanNumbers
     sig { params(number: Integer).returns(String) }
     def words(number)
       raise ArgumentError if number > 999_999_999_999 || number.negative?
-      return postprocess(DIGITS[number]) unless DIGITS[number].nil?
+      return postprocess(T.must(DIGITS[number])) unless DIGITS[number].nil?
 
       number = number.to_s.rjust(12, '0')
 
@@ -31,11 +31,11 @@ module GermanNumbers
       result = "#{under_thousand(thousands)}#{DIGITS[1000]}#{result}" unless thousands.zero?
       unless millions.zero?
         n = under_thousand(millions)
-        result = "#{n == 'ein' ? 'eine' : n} #{decline(millions, DIGITS[1_000_000])} #{result}"
+        result = "#{n == 'ein' ? 'eine' : n} #{decline(millions, T.must(DIGITS[1_000_000]))} #{result}"
       end
       unless billions.zero?
         n = under_thousand(billions)
-        result = "#{n == 'ein' ? 'eine' : n} #{decline(billions, DIGITS[1_000_000_000])} #{result}"
+        result = "#{n == 'ein' ? 'eine' : n} #{decline(billions, T.must(DIGITS[1_000_000_000]))} #{result}"
       end
       result
     end
@@ -52,7 +52,7 @@ module GermanNumbers
     def under_thousand(number)
       digits = number.to_s.split('').reverse.map(&:to_i)
       result = under_hundred(digits.first(2))
-      result = DIGITS[digits.last] + DIGITS[100] + result if digits.count > 2
+      result = T.must(DIGITS[T.must(digits.last)]) + T.must(DIGITS[100]) + result if digits.count > 2
       result
     end
 
@@ -63,7 +63,7 @@ module GermanNumbers
       n = DIGITS["#{digits[1]}#{digits[0]}".to_i]
       return n unless n.nil?
 
-      DIGITS[digits[0]] + 'und' + DIGITS[(T.must(digits[1]) * 10)]
+      T.must(DIGITS[T.must(digits[0])]) + 'und' + T.must(DIGITS[(T.must(digits[1]) * 10)])
     end
 
     sig { params(count: Integer, number: String).returns(String) }
