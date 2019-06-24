@@ -6,7 +6,7 @@ module GermanNumbers
       extend GermanNumbers::StateMachine
 
       state_machine_for :stack do
-        state :initial, can_be_initial: true, final: false
+        state :initial, final: false
         state :null, unique: true
         state :eins, unique: true
         state :zehn, unique: true

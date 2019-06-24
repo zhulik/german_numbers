@@ -6,7 +6,7 @@ module GermanNumbers
       extend GermanNumbers::StateMachine
 
       state_machine_for :order do
-        state :initial, can_be_initial: true, final: false
+        state :initial, final: false
         state :units
         state :tausend_keyword, unique: true, final: false
         state :thousands

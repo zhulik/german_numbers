@@ -36,8 +36,8 @@ module GermanNumbers
         @transitions = Hash.new { [] }
       end
 
-      def state(state, can_be_initial: false, final: true, unique: false)
-        @states[state] = State.new(state, can_be_initial, final, unique)
+      def state(state, final: true, unique: false)
+        @states[state] = State.new(state, @states.empty?, final, unique)
       end
 
       def transition(from:, to:)
