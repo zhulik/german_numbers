@@ -1,35 +1,37 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 module GermanNumbers
   module Parser
     class StackMachine
+      extend T::Sig
+
       extend GermanNumbers::StateMachine
 
       state_machine_for :stack do
-        state :initial, final: false
-        state :null, unique: true
-        state :eins, unique: true
-        state :zehn, unique: true
-        state :short_units, unique: true
-        state :under_twenty, unique: true
-        state :dozens, unique: true
-        state :und_keyword, final: false, unique: true
-        state :units
-        state :hundert_keyword, final: false, unique: true
-        state :hundreds
+        T.unsafe(self).state :initial, final: false
+        T.unsafe(self).state :null, unique: true
+        T.unsafe(self).state :eins, unique: true
+        T.unsafe(self).state :zehn, unique: true
+        T.unsafe(self).state :short_units, unique: true
+        T.unsafe(self).state :under_twenty, unique: true
+        T.unsafe(self).state :dozens, unique: true
+        T.unsafe(self).state :und_keyword, final: false, unique: true
+        T.unsafe(self).state :units
+        T.unsafe(self).state :hundert_keyword, final: false, unique: true
+        T.unsafe(self).state :hundreds
 
-        transition from: :initial, to: %i[units hundert_keyword dozens null eins zehn under_twenty]
-        transition from: :dozens, to: %i[und_keyword hundert_keyword]
-        transition from: :zehn, to: %i[hundert_keyword short_units]
+        T.unsafe(self).transition from: :initial, to: %i[units hundert_keyword dozens null eins zehn under_twenty]
+        T.unsafe(self).transition from: :dozens, to: %i[und_keyword hundert_keyword]
+        T.unsafe(self).transition from: :zehn, to: %i[hundert_keyword short_units]
 
-        transition from: :und_keyword, to: :units
-        transition from: :units, to: :hundert_keyword
-        transition from: :hundert_keyword, to: :hundreds
-        transition from: :hundreds, to: :units
-        transition from: :eins, to: :hundert_keyword
-        transition from: :short_units, to: :hundert_keyword
-        transition from: :under_twenty, to: :hundert_keyword
+        T.unsafe(self).transition from: :und_keyword, to: :units
+        T.unsafe(self).transition from: :units, to: :hundert_keyword
+        T.unsafe(self).transition from: :hundert_keyword, to: :hundreds
+        T.unsafe(self).transition from: :hundreds, to: :units
+        T.unsafe(self).transition from: :eins, to: :hundert_keyword
+        T.unsafe(self).transition from: :short_units, to: :hundert_keyword
+        T.unsafe(self).transition from: :under_twenty, to: :hundert_keyword
       end
 
       SHORT = {
