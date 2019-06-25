@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 module GermanNumbers
@@ -34,19 +34,23 @@ module GermanNumbers
         T.unsafe(self).transition from: :millions, to: %i[milliarde_keyword milliarden_keyword]
       end
 
-      DIGITS = GermanNumbers::DIGITS.invert
-      ERRORS = ['ein', 'sech', 'sieb', nil, ''].freeze
-      KEYWORDS = {
-        'Million' => :million_keyword,
-        'Millionen' => :millionen_keyword,
-        'Milliarde' => :milliarde_keyword,
-        'Milliarden' => :milliarden_keyword
-      }.freeze
+      DIGITS = T.let(GermanNumbers::DIGITS.invert, T::Hash[String, Integer])
 
+      ERRORS = T.let(['ein', 'sech', 'sieb', nil, ''], T::Array[T.untyped])
+
+      KEYWORDS = T.let({
+                         'Million' => :million_keyword,
+                         'Millionen' => :millionen_keyword,
+                         'Milliarde' => :milliarde_keyword,
+                         'Milliarden' => :milliarden_keyword
+                       }, T::Hash[String, Symbol])
+
+      sig { void }
       def initialize
         initialize_order(:initial)
       end
 
+      sig { params(string: String).returns(Integer) }
       def parse(string)
         raise ParsingError if ERRORS.include?(string)
 
@@ -61,6 +65,7 @@ module GermanNumbers
       # rubocop:disable Metrics/MethodLength
       # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
+      sig { params(sum: Integer, part: String).returns(Integer) }
       def parse_part(sum, part)
         if order_state == :initial && KEYWORDS[part].nil?
           self.order_state = :thousands
@@ -92,6 +97,8 @@ module GermanNumbers
 
         return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000 if order_state == :millions
         return sum + SmallNumberParser.new(2..999).parse(part) * 1_000_000_000 if order_state == :billions
+
+        raise ParsingError
       end
       # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/MethodLength
