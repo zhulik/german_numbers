@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 module GermanNumbers
@@ -34,26 +34,28 @@ module GermanNumbers
         T.unsafe(self).transition from: :under_twenty, to: :hundert_keyword
       end
 
-      SHORT = {
-        'eins' => 1,
-        'sech' => 6,
-        'sieb' => 7
-      }.freeze
+      SHORT = T.let({
+                      'eins' => 1,
+                      'sech' => 6,
+                      'sieb' => 7
+                    }, T::Hash[String, Integer])
 
-      KEYWORDS = {
-        'und' => :und_keyword,
-        'hundert' => :hundert_keyword
-      }.freeze
+      KEYWORDS = T.let({
+                         'und' => :und_keyword,
+                         'hundert' => :hundert_keyword
+                       }, T::Hash[String, Symbol])
 
-      SHORT_UNITS = Set.new(%w(drei vier fünf sech sieb acht neun)).freeze
+      SHORT_UNITS = T.let(Set.new(%w(drei vier fünf sech sieb acht neun)), T::Set[String])
 
+      sig { void }
       def initialize
         initialize_stack(:initial)
-        @collector = ''
-        @k = 1
+        @collector = T.let('', String)
+        @k = T.let(1, Integer)
       end
 
       # rubocop:disable Metrics/MethodLength
+      sig { params(result: Integer, letter: String).returns(Integer) }
       def step(result, letter)
         @collector = letter + @collector
         num = SHORT[@collector] || Parser::DIGITS[@collector]
@@ -76,12 +78,14 @@ module GermanNumbers
       end
       # rubocop:enable Metrics/MethodLength
 
+      sig { returns(T::Boolean) }
       def empty?
         @collector.empty?
       end
 
       private
 
+      sig { params(num: T.nilable(Integer), collector: String).returns(T.nilable(Symbol)) }
       def select_state(num, collector)
         if stack_state == :zehn && SHORT_UNITS.include?(collector)
           :short_units
@@ -96,6 +100,7 @@ module GermanNumbers
 
       # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
+      sig { params(num: T.nilable(Integer)).returns(T.nilable(Symbol)) }
       def num_state(num)
         return if num.nil?
         return :zehn if num == 10
