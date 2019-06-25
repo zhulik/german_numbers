@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 module GermanNumbers
@@ -7,13 +7,13 @@ module GermanNumbers
       extend GermanNumbers::StateMachine
 
       state_machine_for :order do
-        state :initial, final: false
-        state :units
-        state :tausend_keyword, unique: true, final: false
-        state :thousands
+        T.unsafe(self).state :initial, final: false
+        T.unsafe(self).state :units
+        T.unsafe(self).state :tausend_keyword, unique: true, final: false
+        T.unsafe(self).state :thousands
 
-        transition from: :initial, to: %i[units tausend_keyword]
-        transition from: :tausend_keyword, to: :thousands
+        T.unsafe(self).transition from: :initial, to: %i[units tausend_keyword]
+        T.unsafe(self).transition from: :tausend_keyword, to: :thousands
       end
 
       def initialize(range = 0..999_999)
