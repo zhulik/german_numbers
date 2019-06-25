@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: run sorbet
-          command: bundle exec srb tc
+          command: bundle exec srb tc --ignore vendor/
       - run:
           name: run rubocop
           command: bundle exec rubocop
