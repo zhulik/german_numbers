@@ -1,8 +1,10 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 module GermanNumbers
   module StateMachine
+    include Kernel
+
     class StateError < StandardError
     end
 
@@ -43,13 +45,13 @@ module GermanNumbers
 
       def transition(from:, to:)
         to = [to].flatten
-        validate_state!(from, *to)
+        validate_state!([from, to].flatten)
         to.each do |s|
           @transitions[from] = @transitions[from] << s
         end
       end
 
-      def validate_state!(*states)
+      def validate_state!(states)
         states.each do |state|
           raise StateError, "#{state} is unknown state" unless @states.include?(state)
         end
@@ -65,11 +67,11 @@ module GermanNumbers
       set_name = "#{field}_state="
       history_name = "@#{field}_state_history"
 
-      define_method("#{field}_state") do
+      T.unsafe(self).define_method("#{field}_state") do
         instance_variable_get(var_name)
       end
 
-      define_method(set_name) do |ns|
+      T.unsafe(self).define_method(set_name) do |ns|
         state = instance_variable_get(var_name)
         raise StateError, "#{ns} is not possible state after #{state}" unless m.transitions[state].include?(ns)
         if instance_variable_get(history_name).include?(ns) && m.states[ns].unique?
@@ -80,15 +82,15 @@ module GermanNumbers
         instance_variable_set(var_name, ns)
       end
 
-      define_method("initialize_#{field}") do |initial|
-        m.validate_state!(initial)
+      T.unsafe(self).define_method("initialize_#{field}") do |initial|
+        m.validate_state!([initial])
         raise StateError, "#{initial} is not possible initial state" unless m.states[initial].can_be_initial?
 
         instance_variable_set(history_name, Set.new)
         instance_variable_set(var_name, initial)
       end
 
-      define_method("final_#{field}_state?") do
+      T.unsafe(self).define_method("final_#{field}_state?") do
         m.states[instance_variable_get(var_name)].final?
       end
     end
