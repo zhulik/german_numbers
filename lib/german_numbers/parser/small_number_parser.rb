@@ -1,9 +1,11 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 module GermanNumbers
   module Parser
     class SmallNumberParser
+      extend T::Sig
+
       extend GermanNumbers::StateMachine
 
       state_machine_for :order do
@@ -16,18 +18,21 @@ module GermanNumbers
         T.unsafe(self).transition from: :tausend_keyword, to: :thousands
       end
 
+      sig { params(range: T::Range[Integer]).void }
       def initialize(range = 0..999_999)
         initialize_order(:initial)
-        @range = range
-        @k = 1
+        @range = T.let(range, T::Range[Integer])
+        @k = T.let(1, Integer)
       end
 
+      sig { params(string: String).returns(Integer) }
       def parse(string)
         string.split(/(tausend)/).reverse.inject(0, &method(:parse_part))
       end
 
       private
 
+      sig { params(sum: Integer, part: String).returns(Integer) }
       def parse_part(sum, part)
         if order_state == :tausend_keyword
           self.order_state = :thousands
@@ -42,6 +47,7 @@ module GermanNumbers
         parse_number(sum, part)
       end
 
+      sig { params(sum: Integer, part: String).returns(Integer) }
       def parse_number(sum, part)
         m = StackMachine.new
         (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do |res|
