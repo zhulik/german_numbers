@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
     working_directory: ~/german_numbers
 
     steps:
@@ -10,8 +10,7 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          - v1-dependencies-
+          - {{ checksum "Gemfile.lock" }}
 
       - run:
           name: install dependencies
@@ -20,7 +19,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: {{ checksum "Gemfile.lock" }}
 
       - run:
           name: run sorbet
