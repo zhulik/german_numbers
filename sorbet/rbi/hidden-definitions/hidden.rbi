@@ -8273,13 +8273,17 @@ class Net::HTTPBadResponse
   extend ::T::Sig
 end
 
-Net::HTTPClientError::EXCEPTION_TYPE = Net::HTTPServerException
-
 class Net::HTTPClientError
   extend ::T::Sig
 end
 
-Net::HTTPClientErrorCode = Net::HTTPClientError
+class Net::HTTPClientError
+end
+
+Net::HTTPClientErrorCode::EXCEPTION_TYPE = Net::HTTPServerException
+
+class Net::HTTPClientError
+end
 
 Net::HTTPClientException = Net::HTTPServerException
 
@@ -8509,13 +8513,17 @@ end
 class Net::HTTPRangeNotSatisfiable
 end
 
-Net::HTTPRedirection::EXCEPTION_TYPE = Net::HTTPRetriableError
-
 class Net::HTTPRedirection
   extend ::T::Sig
 end
 
-Net::HTTPRedirectionCode = Net::HTTPRedirection
+class Net::HTTPRedirection
+end
+
+Net::HTTPRedirectionCode::EXCEPTION_TYPE = Net::HTTPRetriableError
+
+class Net::HTTPRedirection
+end
 
 class Net::HTTPRequest
   extend ::T::Sig
@@ -8558,13 +8566,17 @@ class Net::HTTPSeeOther
   extend ::T::Sig
 end
 
-Net::HTTPServerError::EXCEPTION_TYPE = Net::HTTPFatalError
-
 class Net::HTTPServerError
   extend ::T::Sig
 end
 
-Net::HTTPServerErrorCode = Net::HTTPServerError
+class Net::HTTPServerError
+end
+
+Net::HTTPServerErrorCode::EXCEPTION_TYPE = Net::HTTPFatalError
+
+class Net::HTTPServerError
+end
 
 class Net::HTTPServerException
   extend ::T::Sig
@@ -8584,13 +8596,17 @@ Net::HTTPSession::ProxyMod = Net::HTTP::ProxyDelta
 class Net::HTTP
 end
 
-Net::HTTPSuccess::EXCEPTION_TYPE = Net::HTTPError
-
 class Net::HTTPSuccess
   extend ::T::Sig
 end
 
-Net::HTTPSuccessCode = Net::HTTPSuccess
+class Net::HTTPSuccess
+end
+
+Net::HTTPSuccessCode::EXCEPTION_TYPE = Net::HTTPError
+
+class Net::HTTPSuccess
+end
 
 class Net::HTTPSwitchProtocol
   extend ::T::Sig

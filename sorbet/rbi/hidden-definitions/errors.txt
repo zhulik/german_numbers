@@ -28,8 +28,6 @@
 # wrong constant name <RESERVED_114>
 # wrong constant name <RESERVED_115>
 # wrong constant name <RESERVED_116>
-# wrong constant name <RESERVED_117>
-# wrong constant name <RESERVED_118>
 # wrong constant name <RESERVED_11>
 # wrong constant name <RESERVED_12>
 # wrong constant name <RESERVED_13>
@@ -7963,7 +7961,7 @@
 # wrong constant name puts
 # wrong constant name summarize
 # wrong constant name <static-init>
-# uninitialized constant #<Class:0x00007efef0377c10>::Elem
+# uninitialized constant #<Class:0x00007fa9be396308>::Elem
 # wrong constant name initialize
 # wrong constant name too_many_warnings_message
 # wrong constant name type
@@ -7981,7 +7979,7 @@
 # wrong constant name puts
 # wrong constant name summarize
 # wrong constant name <static-init>
-# uninitialized constant #<Class:0x00007efef036e598>::Elem
+# uninitialized constant #<Class:0x00007fa9be381f70>::Elem
 # wrong constant name initialize
 # wrong constant name too_many_warnings_message
 # wrong constant name type
@@ -8450,7 +8448,7 @@
 # wrong constant name <static-init>
 # wrong constant name wrap
 # wrong constant name <static-init>
-# uninitialized constant #<Class:0x00007efeef968dc8>::Elem
+# uninitialized constant #<Class:0x00007fa9be39d568>::Elem
 # wrong constant name <static-init>
 # uninitialized constant RSpec::Core::Notifications::PendingExampleFixedNotification::Elem
 # wrong constant name <static-init>
@@ -9245,7 +9243,7 @@
 # wrong constant name <static-init>
 # wrong constant name worse_than?
 # wrong constant name +
-# uninitialized constant #<Class:0x00007efeed0cb438>::Elem
+# uninitialized constant #<Class:0x00007fa9bbd79b98>::Elem
 # wrong constant name candidate?
 # wrong constant name ideal?
 # wrong constant name indeterminate_actual_indexes
