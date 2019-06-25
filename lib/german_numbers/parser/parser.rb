@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 module GermanNumbers
@@ -7,28 +7,31 @@ module GermanNumbers
     end
 
     class Parser
+      extend T::Sig
+
       extend GermanNumbers::StateMachine
       state_machine_for :order do
-        state :initial, final: false
-        state :thousands
-        state :million_keyword, final: false
-        state :millionen_keyword, final: false
-        state :million, final: true
-        state :millions, final: true
-        state :milliarde_keyword, final: false
-        state :milliarden_keyword, final: false
-        state :billion, final: true
-        state :billions, final: true
+        T.unsafe(self).state :initial, final: false
+        T.unsafe(self).state :thousands
+        T.unsafe(self).state :million_keyword, final: false
+        T.unsafe(self).state :millionen_keyword, final: false
+        T.unsafe(self).state :million, final: true
+        T.unsafe(self).state :millions, final: true
+        T.unsafe(self).state :milliarde_keyword, final: false
+        T.unsafe(self).state :milliarden_keyword, final: false
+        T.unsafe(self).state :billion, final: true
+        T.unsafe(self).state :billions, final: true
 
-        transition from: :initial, to: %i[thousands million_keyword millionen_keyword
-                                          milliarde_keyword milliarden_keyword]
-        transition from: :thousands, to: %i[million_keyword millionen_keyword milliarde_keyword milliarden_keyword]
-        transition from: :million_keyword, to: :million
-        transition from: :millionen_keyword, to: :millions
-        transition from: :milliarde_keyword, to: :billion
-        transition from: :milliarden_keyword, to: :billions
-        transition from: :million, to: %i[milliarde_keyword milliarden_keyword]
-        transition from: :millions, to: %i[milliarde_keyword milliarden_keyword]
+        T.unsafe(self).transition from: :initial, to: %i[thousands million_keyword millionen_keyword
+                                                         milliarde_keyword milliarden_keyword]
+        T.unsafe(self).transition from: :thousands, to: %i[million_keyword millionen_keyword milliarde_keyword
+                                                           milliarden_keyword]
+        T.unsafe(self).transition from: :million_keyword, to: :million
+        T.unsafe(self).transition from: :millionen_keyword, to: :millions
+        T.unsafe(self).transition from: :milliarde_keyword, to: :billion
+        T.unsafe(self).transition from: :milliarden_keyword, to: :billions
+        T.unsafe(self).transition from: :million, to: %i[milliarde_keyword milliarden_keyword]
+        T.unsafe(self).transition from: :millions, to: %i[milliarde_keyword milliarden_keyword]
       end
 
       DIGITS = GermanNumbers::DIGITS.invert
