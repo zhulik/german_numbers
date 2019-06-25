@@ -5,8 +5,8 @@ class StateMachineExample
   extend GermanNumbers::StateMachine
 
   state_machine_for :state do
-    state :first, can_be_initial: true
-    state :second, can_be_initial: true
+    state :first
+    state :second
     state :third
     state :fourth
 

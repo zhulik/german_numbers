@@ -9,7 +9,7 @@ module GermanNumbers
     class Parser
       extend GermanNumbers::StateMachine
       state_machine_for :order do
-        state :initial, can_be_initial: true, final: false
+        state :initial, final: false
         state :thousands
         state :million_keyword, final: false
         state :millionen_keyword, final: false
