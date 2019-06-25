@@ -23,6 +23,9 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
+          name: run sorbet
+          command: bundle srb tc
+      - run:
           name: run rubocop
           command: bundle exec rubocop
       - run:
