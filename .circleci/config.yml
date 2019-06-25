@@ -10,7 +10,7 @@ jobs:
 
       - restore_cache:
           keys:
-          - {{ checksum "Gemfile.lock" }}
+          - dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: install dependencies
@@ -19,7 +19,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: {{ checksum "Gemfile.lock" }}
+          key: dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
           name: run sorbet
