@@ -10,7 +10,7 @@ AllCops:
 
   DisplayCopNames: true
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
   Exclude:
     - spec/**/*.rb
@@ -63,5 +63,5 @@ Metrics/ClassLength:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-Documentation:
+Style/Documentation:
   Enabled: false
