@@ -22,8 +22,6 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'sorbet-runtime'
-
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
@@ -32,5 +30,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby-prof'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'solargraph'
-  spec.add_development_dependency 'sorbet'
 end

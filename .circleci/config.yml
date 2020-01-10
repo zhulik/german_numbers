@@ -20,10 +20,6 @@ jobs:
           paths:
             - ./vendor/bundle
           key: dependencies-{{ checksum "Gemfile.lock" }}
-
-      - run:
-          name: run sorbet
-          command: bundle exec srb tc --ignore vendor/
       - run:
           name: run rubocop
           command: bundle exec rubocop

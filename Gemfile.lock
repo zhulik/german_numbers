@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     german_numbers (0.7)
-      sorbet-runtime
 
 GEM
   remote: https://rubygems.org/
@@ -78,10 +77,6 @@ GEM
       thor (~> 1.0)
       tilt (~> 2.0)
       yard (~> 0.9)
-    sorbet (0.5.5226)
-      sorbet-static (= 0.5.5226)
-    sorbet-runtime (0.5.5226)
-    sorbet-static (0.5.5226-universal-darwin-14)
     thor (1.0.1)
     tilt (2.0.10)
     unicode-display_width (1.6.0)
@@ -100,7 +95,6 @@ DEPENDENCIES
   ruby-prof
   simplecov
   solargraph
-  sorbet
 
 BUNDLED WITH
    2.1.2
