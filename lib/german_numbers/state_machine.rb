@@ -43,14 +43,14 @@ module GermanNumbers
       def transition(from:, to:)
         to = [to].flatten
         validate_state!(from, *to)
-        to.each do |s|
-          @transitions[from] = @transitions[from] << s
+        to.each do
+          @transitions[from] = @transitions[from] << _1
         end
       end
 
       def validate_state!(*states)
-        states.each do |state|
-          raise StateError, "#{state} is unknown state" unless @states.include?(state)
+        states.each do
+          raise StateError, "#{_1} is unknown state" unless @states.include?(_1)
         end
       end
     end

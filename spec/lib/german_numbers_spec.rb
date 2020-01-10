@@ -84,8 +84,8 @@ describe GermanNumbers do
     xit 'vise-versa' do
       require 'ruby-prof'
       result = RubyProf.profile do
-        (0..25_000).each do |num|
-          expect(described_class.parse(described_class.stringify(num))).to eq(num)
+        25_001.times do
+          expect(described_class.parse(described_class.stringify(_1))).to eq(_1)
         end
       end
       printer = RubyProf::GraphPrinter.new(result)
