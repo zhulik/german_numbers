@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 describe GermanNumbers do
@@ -72,7 +73,7 @@ describe GermanNumbers do
     ['ein', 'sech', 'sieb', 'undeinundvierzig', 'neunhundertachthunderteins', 'nullhundert', 'zehnhundert',
      'dreißighundert', 'wrong', 'errorhundert', '123', 'einshundert', 'einstausend', 'zwölfhundert',
      'einstausendeinstausend', 'und', 'undneunzig', 'einhundertundneunzig', 'nulltausend', 'siebenzehn', 'einzehn',
-     'einszehn', 'sechszehn', 'zweizehn', 'hundert', nil, '', 'zwei Million', 'zwei Billion', 'eine Millionen',
+     'einszehn', 'sechszehn', 'zweizehn', 'hundert', '', 'zwei Million', 'zwei Billion', 'eine Millionen',
      'eine Milliarden', 'eintausend Millionen', 'null Million', 'null Millionen', 'null Milliarde', 'null Milliarden',
      'ein Millionen', 'eins Millionen', 'ein Milliarde', 'ein Milliarden', 'eine Million eine Million',
      'eine Milliarde eine Milliarde', 'Million', 'Milliarde', 'Millionen', 'Milliarden'].each do |words|
