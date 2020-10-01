@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Gem for converting numbers to german words and vise-versa.'
   spec.description   = 'Gem for converting numbers to german words and vise-versa.'
-  spec.homepage      = 'https://github.com/zhulik/german_words'
+  spec.homepage      = 'https://github.com/zhulik/german_numbers'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
