@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe GermanNumbers do
+  # rubocop:disable Lint/ConstantDefinitionInBlock
+  # rubocop:disable RSpec/LeakyConstantDeclaration
   EXAMPLES = {
     0 => 'null',
     1 => 'eins',
@@ -53,6 +55,9 @@ describe GermanNumbers do
     213_431_983_111 => 'zweihundertdreizehn Milliarden vierhunderteinunddreißig Millionen neunhundertdreiundachtzigtausendeinhundertelf'
   }.freeze
 
+  # rubocop:enable Lint/ConstantDefinitionInBlock
+  # rubocop:enable RSpec/LeakyConstantDeclaration
+
   describe '.stringify' do
     EXAMPLES.each do |number, words|
       it "for #{number} it returns #{words}" do
@@ -81,7 +86,7 @@ describe GermanNumbers do
       end
     end
 
-    xit 'vise-versa' do
+    xit 'vise-versa' do # rubocop:disable RSpec/ExampleLength
       require 'ruby-prof'
       result = RubyProf.profile do
         25_001.times do
@@ -89,20 +94,20 @@ describe GermanNumbers do
         end
       end
       printer = RubyProf::GraphPrinter.new(result)
-      printer.print(STDOUT, {})
+      printer.print($stdout, {})
     end
   end
 
   describe 'valid?' do
     context 'when valid number is passed' do
       it 'returns true' do
-        expect(described_class.valid?('zwei Millionen sechs')).to be_truthy
+        expect(described_class).to be_valid('zwei Millionen sechs')
       end
     end
 
     context 'when invalid number is passed' do
       it 'returns false' do
-        expect(described_class.valid?('invalid')).to be_falsey
+        expect(described_class).not_to be_valid('invalid')
       end
     end
   end

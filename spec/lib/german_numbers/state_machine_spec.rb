@@ -19,6 +19,8 @@ describe GermanNumbers::StateMachine do
     let!(:machine) { StateMachineExample.new(:first) }
 
     context 'with possible transition' do
+      # rubocop:disable RSpec/ExampleLength
+      # rubocop:disable RSpec/MultipleExpectations
       it 'changes state' do
         machine.state_state = :second
         expect(machine.state_state).to eq(:second)
@@ -33,10 +35,12 @@ describe GermanNumbers::StateMachine do
         machine.state_state = :fourth
         expect(machine.state_state).to eq(:fourth)
       end
+      # rubocop:enable RSpec/ExampleLength
+      # rubocop:enable RSpec/MultipleExpectations
     end
 
     context 'with impossible transition' do
-      it 'raises error' do
+      it 'raises error' do # rubocop:disable RSpec/MultipleExpectations
         expect { machine.state_state = :unknown }.to raise_error(GermanNumbers::StateMachine::StateError)
         expect { machine.state_state = :third }.to raise_error(GermanNumbers::StateMachine::StateError)
       end

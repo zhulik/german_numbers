@@ -49,7 +49,7 @@ module GermanNumbers
       def parse(string)
         raise ParsingError if ERRORS.include?(string)
 
-        string.split(' ').reverse.inject(0, &method(:parse_part)).tap do
+        string.split.reverse.inject(0) { parse_part(_1, _2) }.tap do
           raise ParsingError unless final_order_state?
         end
       rescue ParsingError, StateMachine::StateError
