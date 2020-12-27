@@ -10,7 +10,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.authors       = ['Gleb Sinyavsky']
   spec.email         = ['zhulik.gleb@gmail.com']
 
-  spec.required_ruby_version = '~> 3.0.0'
+  spec.required_ruby_version = '>= 2.7'
 
   spec.summary       = 'Gem for converting numbers to german words and vise-versa.'
   spec.description   = 'Gem for converting numbers to german words and vise-versa.'

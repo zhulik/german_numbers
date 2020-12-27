@@ -4,28 +4,31 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ '2.7', '3.0' ]
+    
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0.0
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
 
-    - uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('*gemspec') }}
-        restore-keys: ${{ runner.os }}-gems-
-    
-    - name: Install deps
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-    
-    - name: Run rubocop
-      run: bundle exec rubocop
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-${{ hashFiles('*gemspec') }}
+          restore-keys: ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-
+      
+      - name: Install gems
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      
+      - name: Run rubocop
+        run: bundle exec rubocop
     
     - name: Run tests
       run: bundle exec rspec
