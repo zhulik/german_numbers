@@ -22,7 +22,7 @@ module GermanNumbers
       end
 
       def parse(string)
-        string.split(/(tausend)/).reverse.inject(0, &method(:parse_part))
+        string.split(/(tausend)/).reverse.inject(0) { parse_part(_1, _2) }
       end
 
       private
@@ -43,7 +43,7 @@ module GermanNumbers
 
       def parse_number(sum, part)
         m = StackMachine.new
-        (sum + part.split('').reverse.inject(0, &m.method(:step)) * @k).tap do
+        (sum + part.split('').reverse.inject(0) { m.step(_1, _2) } * @k).tap do
           raise ParsingError if !m.empty? || !m.final_stack_state? || !@range.cover?(_1)
         end
       end

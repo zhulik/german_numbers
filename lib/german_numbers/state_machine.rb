@@ -29,9 +29,7 @@ module GermanNumbers
     end
 
     class Machine
-      attr_reader :states
-
-      attr_reader :transitions
+      attr_reader :states, :transitions
 
       def initialize
         @states = {}

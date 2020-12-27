@@ -4,11 +4,13 @@ lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'german_numbers/version'
 
-Gem::Specification.new do |spec|
+Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.name          = 'german_numbers'
   spec.version       = GermanNumbers::VERSION
   spec.authors       = ['Gleb Sinyavsky']
   spec.email         = ['zhulik.gleb@gmail.com']
+
+  spec.required_ruby_version = '~> 3.0.0'
 
   spec.summary       = 'Gem for converting numbers to german words and vise-versa.'
   spec.description   = 'Gem for converting numbers to german words and vise-versa.'
@@ -27,6 +29,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-performance'
+  spec.add_development_dependency 'rubocop-rake'
+  spec.add_development_dependency 'rubocop-rspec'
   spec.add_development_dependency 'ruby-prof'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'solargraph'

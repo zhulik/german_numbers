@@ -36,8 +36,8 @@ module GermanNumbers
 
     def postprocess(result)
       result += 's' if result.end_with?('ein')
-      result = 'ein' + result if SMALL_KEYWORDS.include?(result)
-      result = 'eine ' + result if BIG_KEYWORDS.include?(result)
+      result = "ein#{result}" if SMALL_KEYWORDS.include?(result)
+      result = "eine #{result}" if BIG_KEYWORDS.include?(result)
       result.strip
     end
 
@@ -54,14 +54,14 @@ module GermanNumbers
       n = DIGITS["#{digits[1]}#{digits[0]}".to_i]
       return n unless n.nil?
 
-      DIGITS[digits[0]] + 'und' + DIGITS[(digits[1] * 10)]
+      "#{DIGITS[digits[0]]}und#{DIGITS[(digits[1] * 10)]}"
     end
 
     def decline(count, number)
       return number if count == 1
-      return number + 'n' if number.end_with?('e')
+      return "#{number}n" if number.end_with?('e')
 
-      number + 'en'
+      "#{number}en"
     end
   end
 end
